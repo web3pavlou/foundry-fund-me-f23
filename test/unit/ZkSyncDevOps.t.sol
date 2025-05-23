@@ -2,8 +2,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import {Test} from "forge-std/Test.sol";
-import {DevOpsTools} from "../../src/DevOpsTools.sol";
-import {ZkSyncChainChecker} from "../src/ZkSyncChainChecker.sol";
+import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
+import {ZkSyncChainChecker} from "..src/ZkSyncChainChecker.sol";
 import {FoundryZkSyncChecker} from "../src/FoundryZkSyncChecker.sol";
 
 contract DevOpsToolsTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
