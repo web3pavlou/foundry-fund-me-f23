@@ -1,95 +1,31 @@
 // SPDX-License-Identifier: MIT
 
-import {Test} from "forge-std/Test.sol";
-import {DevOpsTools} from "foundry-devops/src/DevOpsTools.sol";
-import {ZkSyncChainChecker} from "..src/ZkSyncChainChecker.sol";
-import {FoundryZkSyncChecker} from "../src/FoundryZkSyncChecker.sol";
+pragma solidity ^0.8.18;
 
-contract DevOpsToolsTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
-    string public constant SEARCH_PATH = "broadcast";
+import {Test, console} from "forge-std/Test.sol";
+import {ZkSyncChainChecker} from "lib/foundry-devops/src/ZkSyncChainChecker.sol";
+import {FoundryZkSyncChecker} from "lib/foundry-devops/src/FoundryZkSyncChecker.sol";
 
-    function testGetMostRecentlyDeployedContract()
-        public
-        skipZkSync
-        onlyVanillaFoundry
-    {
-        string memory contractName = "Stuff";
-        uint256 chainId = 31337;
-        address expectedAddress = 0x5FbDB2315678afecb367f032d93F642f64180aa3;
-        address mostRecentDeployment = DevOpsTools.get_most_recent_deployment(
-            contractName,
-            chainId,
-            SEARCH_PATH
-        );
-        assertEq(mostRecentDeployment, expectedAddress);
-    }
+contract ZkSyncDevOps is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
+    // Remove the `skipZkSync`, then run `forge test --mt testZkSyncChainFails --zksync` and this will fail!
+    function testZkSyncChainFails() public skipZkSync {
+        address ripemd = address(uint160(3));
 
-    function testGetMostRecentlyDeployedEvenWhenMultipleAreDeployed()
-        public
-        skipZkSync
-        onlyVanillaFoundry
-    {
-        string memory contractName = "FundMe";
-        uint256 chainId = 1234;
-        address expectedAddress = 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9;
-        address mostRecentDeployment = DevOpsTools.get_most_recent_deployment(
-            contractName,
-            chainId,
-            SEARCH_PATH
-        );
-        assertEq(mostRecentDeployment, expectedAddress);
-    }
-
-    /// forge-config: default.allow_internal_expect_revert = true
-    function testExpectRevertIfNoRun() public onlyVanillaFoundry {
-        string memory contractName = "FundMe";
-        uint256 chainId = 9999;
-        vm.expectRevert(
-            "No deployment artifacts were found for specified chain"
-        );
-        DevOpsTools.get_most_recent_deployment(
-            contractName,
-            chainId,
-            SEARCH_PATH
-        );
-    }
-
-    /// forge-config: default.allow_internal_expect_revert = true
-    function testExpectRevertIfNoDeployment()
-        public
-        skipZkSync
-        onlyVanillaFoundry
-    {
-        string memory contractName = "MissingContract";
-        uint256 chainId = 1234;
-        vm.expectRevert(
-            bytes.concat(
-                "No contract named ",
-                "'",
-                bytes(contractName),
-                "'",
-                " has been deployed on chain ",
-                bytes(vm.toString(chainId))
-            )
-        );
-        DevOpsTools.get_most_recent_deployment(
-            contractName,
-            chainId,
-            SEARCH_PATH
-        );
-    }
-
-    // All other tests use what appear to be legacy broadcast files
-    // This one uses the newer type with no rpc property
-    function testNonLegacyBroadcast() public skipZkSync onlyVanillaFoundry {
-        string memory contractName = "NewStuff";
-        uint256 chainId = 31337;
-        address expectedAddress = 0x5FbDB2315678afecb367f032d93F642f64180aa3;
-        address mostRecentDeployment = DevOpsTools.get_most_recent_deployment(
-            contractName,
-            chainId,
-            SEARCH_PATH
-        );
-        assertEq(mostRecentDeployment, expectedAddress);
+        bool success;
+        // Don't worry about what this "assembly" thing is for now
+        assembly {
+            success := call(gas(), ripemd, 0, 0, 0, 0, 0)
+        }
+        assert(success);
     }
 }
+
+//     //You'll need `ffi=true` in your foundry.toml to run this test
+//     // Remove the `onlyVanillaFoundry`, then run `foundryup-zksync` and then
+//     // `forge test --mt testZkSyncFoundryFails --zksync`
+//     // and this will fail!
+//     function testZkSyncFoundryFails() public onlyVanillaFoundry {
+//         bool exists = vm.keyExistsJson('{"hi": "true"}', ".hi");
+//         assert(exists);
+//     }
+// }

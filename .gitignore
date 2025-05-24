@@ -1,17 +1,25 @@
-# Compiler files
-cache/
+# Build and compiler artifacts
 out/
+cache/
+zkout/
+.gas-snapshot/
 
-# Ignores development broadcast logs
+# Foundry and test artifacts
+lib/
+broadcast/
+
+# Allow /broadcast directory but ignore Anvil-specific logs and dry runs
 !/broadcast
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Docs
+# Environment and OS files
+.env
+.DS_Store
+
+# Docs 
 docs/
 
-# Dotenv file
-.env
-
-.DS_Store
-zkout/
+# zkSync toolchain files (optional based on usage)
+foundryup-zksync
+foundryup-zksync/
