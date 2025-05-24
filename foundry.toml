@@ -1,9 +1,10 @@
 [profile.default]
 remappings = [
-  "@chainlink=lib/chainlink/contracts/",
+  "@chainlink/=lib/chainlink/src/",
   "forge-std/=lib/forge-std/src/",
   "foundry-devops/=lib/foundry-devops/",
 ]
+
 
 fs_permissions = [
   { access = "read", path = "./broadcast" },
