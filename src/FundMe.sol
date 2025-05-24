@@ -46,7 +46,6 @@ contract FundMe {
         for (uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
-
         }
         s_funders = new address[](0);
 
@@ -91,11 +90,8 @@ contract FundMe {
         fund();
     }
 
-
     // View/Pure functions(Getters)
-    function getAddressToAmountFunded(
-        address fundingAddress
-    ) external view returns (uint256) {
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 
@@ -106,9 +102,4 @@ contract FundMe {
     function getOwner() external view returns (address) {
         return i_owner;
     }
-
 }
-
-
-
-
