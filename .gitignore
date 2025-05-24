@@ -23,3 +23,4 @@ docs/
 # zkSync toolchain files (optional based on usage)
 foundryup-zksync
 foundryup-zksync/
+broadcast/
